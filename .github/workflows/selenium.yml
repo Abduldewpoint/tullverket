@@ -1,38 +1,45 @@
-name: Run Selenium Script
+name: selenium-test
 
 on:
   workflow_dispatch:
 
 jobs:
-  selenium-test:
+  run-selenium:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y xvfb unzip curl
-        curl -sSL https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.78/linux64/chrome-linux64.zip -o chrome.zip
-        unzip chrome.zip
-        sudo mv chrome-linux64 /opt/chrome
-        sudo ln -s /opt/chrome/chrome /usr/bin/google-chrome
+      - name: Install Chrome and ChromeDriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb unzip curl
+          
+          # Download Chrome
+          curl -sSL https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.78/linux64/chrome-linux64.zip -o chrome.zip
+          unzip chrome.zip
+          sudo mv chrome-linux64 /opt/chrome
+          
+          # Only create symlink if it doesn't already exist
+          if ! [ -f /usr/bin/google-chrome ]; then
+            sudo ln -s /opt/chrome/chrome /usr/bin/google-chrome
+          fi
 
-        curl -sSL https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.78/linux64/chromedriver-linux64.zip -o driver.zip
-        unzip driver.zip
-        chmod +x chromedriver-linux64/chromedriver
-        sudo mv chromedriver-linux64/chromedriver /usr/bin/chromedriver
+          # Download ChromeDriver
+          curl -sSL https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.78/linux64/chromedriver-linux64.zip -o driver.zip
+          unzip driver.zip
+          chmod +x chromedriver-linux64/chromedriver
+          sudo mv chromedriver-linux64/chromedriver /usr/bin/chromedriver
 
-    - name: Install Python packages
-      run: pip install selenium
+      - name: Install Python dependencies
+        run: pip install -r scripts/requirements.txt
 
-    - name: Run Selenium script
-      run: |
-        xvfb-run --auto-servernum python3 scripts/fetch_with_selenium.py
+      - name: Run Selenium script
+        run: |
+          xvfb-run python scripts/fetch_with_selenium.py
