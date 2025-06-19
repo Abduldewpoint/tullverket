@@ -8,8 +8,8 @@ url = "https://tulltaxan.tullverket.se/arctictariff-public-proxy/arctictariff-tr
 # Step 2: Set the parameters for the request
 params = {
     "codetype": "1101000000,GCR",       # This is the code type for "Typ av deklaration"
-    "startDate": "2025-04-01",          # Use a working date (adjust if needed)
-    "endDate": "2025-04-10",
+    "startDate": "2025-06-19",          # Use a working date (adjust if needed)
+    "endDate": "2025-06-19",
     "language": "en",                   # Language of the returned data
     "sortOrder": "A"                    # Sort ascending
 }
