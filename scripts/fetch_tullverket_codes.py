@@ -5,7 +5,7 @@ from datetime import datetime
 # API URL and parameters for Landkod
 url = "https://tulltaxan.tullverket.se/arctictariff-public-proxy/arctictariff-trusted-rs/v1/cl/codetypes"
 params = {
-    "codetype": "1212002000,GCR",  # land codes
+    "codetype": "1101000000,GCR",  # Typ av deklaration
     "startDate": "2025-06-19",
     "endDate": "2025-06-19",
     "language": "en",
